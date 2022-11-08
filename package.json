@@ -1,11 +1,15 @@
 {
   "scripts": {
-    "build": "webpack",
+    "build": "NODE_ENV=production webpack",
+    "build-dev": "webpack",
     "start": "webpack serve",
     "watch": "webpack --watch"
   },
   "homepage": "https://github.com/itzaur/Learn-WebGL-with-Three.js#readme",
   "devDependencies": {
+    "@babel/core": "^7.20.2",
+    "@babel/preset-env": "^7.20.2",
+    "babel-loader": "^9.1.0",
     "webpack": "^5.74.0",
     "webpack-cli": "^4.10.0",
     "webpack-dev-server": "^4.11.1"
