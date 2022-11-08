@@ -14,25 +14,12 @@ module.exports = {
   devtool: "source-map",
 
   entry: {
-    // three: "./src/three.min.js",
     main: "./src/index.js",
   },
 
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "[name].bundle.js",
-  },
-
-  optimization: {
-    splitChunks: {
-      cacheGroups: {
-        commons: {
-          test: /[\\/]node_modules[\\/]/,
-          name: "vendors",
-          chunks: "all",
-        },
-      },
-    },
   },
 
   module: {
@@ -58,10 +45,10 @@ module.exports = {
 
   devServer: {
     static: "./dist",
+    hot: true,
     devMiddleware: {
       writeToDisk: true,
     },
-    hot: true,
   },
 
   plugins: [
