@@ -13,8 +13,26 @@ module.exports = {
   mode: mode,
   devtool: "source-map",
 
+  entry: {
+    // three: "./src/three.min.js",
+    main: "./src/index.js",
+  },
+
   output: {
     path: path.resolve(__dirname, "dist"),
+    filename: "[name].bundle.js",
+  },
+
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+          test: /[\\/]node_modules[\\/]/,
+          name: "vendors",
+          chunks: "all",
+        },
+      },
+    },
   },
 
   module: {
@@ -53,4 +71,10 @@ module.exports = {
       template: "./src/index.html",
     }),
   ],
+
+  performance: {
+    // hints: false,
+    maxEntrypointSize: 1024000,
+    maxAssetSize: 1024000,
+  },
 };
