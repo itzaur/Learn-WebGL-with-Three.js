@@ -1,9 +1,21 @@
 import "./styles/index.scss";
 import * as THREE from "three";
 import { Mesh } from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import gsap from "gsap";
 
 console.log(THREE);
+
+//Cursor
+let cursor = {
+  x: 0,
+  y: 0,
+};
+
+window.addEventListener("mousemove", (e) => {
+  cursor.x = e.clientX / sizes.width - 0.5;
+  cursor.y = -(e.clientY / sizes.height - 0.5);
+});
 
 //Scene
 const scene = new THREE.Scene();
@@ -21,7 +33,7 @@ mesh.position.set(0.7, -0.6, 0.4);
 // mesh.rotation.y = 0.6;
 // mesh.rotation.z = 0.4;
 // mesh.rotation.reorder("YXZ");
-mesh.rotation.set(Math.PI * 0.25, Math.PI * 0.25, 1.5);
+// mesh.rotation.set(Math.PI * 0.25, Math.PI * 0.25, 1.5);
 // mesh.rotation.x = Math.PI * 0.25;
 // mesh.rotation.y = Math.PI * 0.25;
 mesh.scale.set(1, 1, 1);
@@ -64,13 +76,27 @@ const sizes = {
 };
 
 //Camera
-const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height);
+const camera = new THREE.PerspectiveCamera(
+  75,
+  sizes.width / sizes.height,
+  1,
+  1000
+);
+// const aspectRatio = sizes.width / sizes.height;
+// const camera = new THREE.OrthographicCamera(
+//   -1 * aspectRatio,
+//   1 * aspectRatio,
+//   1,
+//   -1,
+//   0.1,
+//   100
+// );
 // camera.position.z = 3;
 // camera.position.y = 1;
 // camera.position.x = 0.6;
 camera.position.set(0.6, 0.5, 3);
 // camera.lookAt(new THREE.Vector3(2, 1, -2));
-// camera.lookAt(mesh.position);
+camera.lookAt(mesh.position);
 
 scene.add(camera);
 
@@ -105,15 +131,18 @@ console.log(clock);
 //   duration: 1,
 //   delay: 2,
 // });
-gsap
-  .timeline({ repeat: -1, duration: 1 })
-  .to(mesh.position, {
-    x: 2,
-  })
-  .to(mesh.position, {
-    x: 0.7,
-    ease: "back.out(1.7)",
-  });
+// gsap
+//   .timeline({ repeat: -1, duration: 1 })
+//   .to(mesh.position, {
+//     x: 2,
+//   })
+//   .to(mesh.position, {
+//     x: 0.7,
+//     ease: "back.out(1.7)",
+//   });
+
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true;
 
 const tick = () => {
   // const currentTime = Date.now();
@@ -131,7 +160,17 @@ const tick = () => {
   // mesh.position.y = Math.sin(elapsedTime);
   // camera.lookAt(mesh.position);
 
+  // mesh.rotation.x = Math.cos(elapsedTime);
+  // mesh.rotation.y = Math.sin(elapsedTime);
+  controls.update();
+
   renderer.render(scene, camera);
+
+  // camera.position.x = Math.sin(cursor.x * Math.PI * 2) * 3;
+  // camera.position.z = Math.cos(cursor.x * Math.PI * 2) * 3;
+  // camera.position.y = cursor.y * 3;
+  // camera.lookAt(mesh.position);
+
   window.requestAnimationFrame(tick);
 };
 tick();
