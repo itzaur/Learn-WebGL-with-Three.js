@@ -1,5 +1,7 @@
 import "./styles/index.scss";
 import * as THREE from "three";
+import { Mesh } from "three";
+import gsap from "gsap";
 
 console.log(THREE);
 
@@ -7,53 +9,53 @@ console.log(THREE);
 const scene = new THREE.Scene();
 
 //Cube
-// const geometry = new THREE.BoxGeometry(1, 1, 1);
-// const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-// const mesh = new THREE.Mesh(geometry, material);
-// // mesh.position.x = 0.7;
-// // mesh.position.y = -0.6;
-// // mesh.position.z = 0.4;
-// mesh.position.set(0.7, -0.6, 0.4);
+const geometry = new THREE.BoxGeometry(1, 1, 1);
+const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+const mesh = new THREE.Mesh(geometry, material);
+// mesh.position.x = 0.7;
+// mesh.position.y = -0.6;
+// mesh.position.z = 0.4;
+mesh.position.set(0.7, -0.6, 0.4);
 // mesh.position.normalize();
-// // mesh.rotation.x = 0.6;
-// // mesh.rotation.y = 0.6;
-// // mesh.rotation.z = 0.4;
-// // mesh.rotation.reorder("YXZ");
-// mesh.rotation.set(Math.PI * 0.25, Math.PI * 0.25, 1.5);
-// // mesh.rotation.x = Math.PI * 0.25;
-// // mesh.rotation.y = Math.PI * 0.25;
-// mesh.scale.set(1.8, 1, 1);
+// mesh.rotation.x = 0.6;
+// mesh.rotation.y = 0.6;
+// mesh.rotation.z = 0.4;
+// mesh.rotation.reorder("YXZ");
+mesh.rotation.set(Math.PI * 0.25, Math.PI * 0.25, 1.5);
+// mesh.rotation.x = Math.PI * 0.25;
+// mesh.rotation.y = Math.PI * 0.25;
+mesh.scale.set(1, 1, 1);
 
 //Group
-const group = new THREE.Group();
-scene.add(group);
-group.position.set(0, 1.2, 0);
+// const group = new THREE.Group();
+// scene.add(group);
+// group.position.set(0, 1.2, 0);
 
-const cube1 = new THREE.Mesh(
-  new THREE.BoxGeometry(1, 1, 1),
-  new THREE.MeshBasicMaterial({ color: 0xff0000 })
-);
-group.add(cube1);
+// const cube1 = new THREE.Mesh(
+//   new THREE.BoxGeometry(1, 1, 1),
+//   new THREE.MeshBasicMaterial({ color: 0xff0000 })
+// );
+// group.add(cube1);
 
-const cube2 = new THREE.Mesh(
-  new THREE.BoxGeometry(1, 1, 1),
-  new THREE.MeshBasicMaterial({ color: 0x00ff00 })
-);
-group.add(cube2);
-cube2.position.set(-1.5, 0, 0);
+// const cube2 = new THREE.Mesh(
+//   new THREE.BoxGeometry(1, 1, 1),
+//   new THREE.MeshBasicMaterial({ color: 0x00ff00 })
+// );
+// group.add(cube2);
+// cube2.position.set(-1.5, 0, 0);
 
-const cube3 = new THREE.Mesh(
-  new THREE.BoxGeometry(1, 1, 1),
-  new THREE.MeshBasicMaterial({ color: 0x0000ff })
-);
-group.add(cube3);
-cube3.position.set(1.5, 0, 0);
+// const cube3 = new THREE.Mesh(
+//   new THREE.BoxGeometry(1, 1, 1),
+//   new THREE.MeshBasicMaterial({ color: 0x0000ff })
+// );
+// group.add(cube3);
+// cube3.position.set(2.2, 0, 0);
 
 //Axes Helper
 const axesHelper = new THREE.AxesHelper();
 scene.add(axesHelper);
 
-// scene.add(mesh);
+scene.add(mesh);
 
 //Sizes
 const sizes = {
@@ -83,4 +85,53 @@ const renderer = new THREE.WebGLRenderer({
 });
 
 renderer.setSize(sizes.width, sizes.height);
-renderer.render(scene, camera);
+// renderer.render(scene, camera);
+
+// let time = Date.now();
+
+//Clock
+const clock = new THREE.Clock();
+console.log(clock);
+
+//GSAP
+// gsap.to(mesh.position, {
+//   x: 2,
+//   duration: 1,
+//   delay: 1,
+// });
+// gsap.to(mesh.position, {
+//   x: 0.6,
+//   ease: "none",
+//   duration: 1,
+//   delay: 2,
+// });
+gsap
+  .timeline({ repeat: -1, duration: 1 })
+  .to(mesh.position, {
+    x: 2,
+  })
+  .to(mesh.position, {
+    x: 0.7,
+    ease: "back.out(1.7)",
+  });
+
+const tick = () => {
+  // const currentTime = Date.now();
+  // const deltaTime = currentTime - time;
+  // time = currentTime;
+  const elapsedTime = clock.getElapsedTime();
+  // console.log(elapsedTime);
+
+  // group.rotation.x = elapsedTime * Math.PI * 2;
+  // cube1.position.x = Math.cos(elapsedTime);
+  // cube1.position.y = Math.sin(elapsedTime);
+  // camera.lookAt(cube1.position);
+  // cube2.rotation.y += 0.01;
+  // mesh.position.x = Math.cos(elapsedTime);
+  // mesh.position.y = Math.sin(elapsedTime);
+  // camera.lookAt(mesh.position);
+
+  renderer.render(scene, camera);
+  window.requestAnimationFrame(tick);
+};
+tick();
