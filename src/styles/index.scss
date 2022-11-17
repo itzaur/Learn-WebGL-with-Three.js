@@ -10,6 +10,17 @@ body {
   height: 100vh;
 }
 
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+}
+
 .webgl {
-  margin: auto;
+  // margin: auto;
+  position: fixed;
+  top: 0;
+  left: 0;
+  outline: none;
 }

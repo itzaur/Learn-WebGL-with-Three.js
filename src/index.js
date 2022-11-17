@@ -1,15 +1,26 @@
 import "./styles/index.scss";
 import * as THREE from "three";
-import { Mesh } from "three";
+// import { Mesh } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import gsap from "gsap";
+import GUI from "lil-gui";
 
 console.log(THREE);
 
-//Cursor
+//ANCHOR Cursor
 let cursor = {
   x: 0,
   y: 0,
+};
+
+const parameters = {
+  color: 0x00ff00,
+  spin: () => {
+    gsap.to(mesh.rotation, {
+      y: mesh.rotation.y + Math.PI * 2,
+      duration: 1.2,
+    });
+  },
 };
 
 window.addEventListener("mousemove", (e) => {
@@ -22,12 +33,29 @@ const scene = new THREE.Scene();
 
 //Cube
 const geometry = new THREE.BoxGeometry(1, 1, 1);
-const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+// const positionsArray = new Float32Array([0, 0, 0, 0, 1, 0, 1, 0, 0]);
+// const positionsAttribute = new THREE.BufferAttribute(positionsArray, 3);
+// const geometry = new THREE.BufferGeometry();
+// geometry.setAttribute("position", positionsAttribute);
+
+// let count = 5000;
+// const positionsArray = new Float32Array(count * 3 * 3);
+// const positionsAttribute = new THREE.BufferAttribute(positionsArray, 3);
+// const geometry = new THREE.BufferGeometry();
+// for (let i = 0; i < count * 3 * 3; i++) {
+//   positionsArray[i] = (Math.random() - 0.5) * 4;
+// }
+// geometry.setAttribute("position", positionsAttribute);
+
+const material = new THREE.MeshBasicMaterial({
+  color: parameters.color,
+  // wireframe: true,
+});
 const mesh = new THREE.Mesh(geometry, material);
 // mesh.position.x = 0.7;
 // mesh.position.y = -0.6;
 // mesh.position.z = 0.4;
-mesh.position.set(0.7, -0.6, 0.4);
+mesh.position.set(0, 0, 0);
 // mesh.position.normalize();
 // mesh.rotation.x = 0.6;
 // mesh.rotation.y = 0.6;
@@ -36,7 +64,26 @@ mesh.position.set(0.7, -0.6, 0.4);
 // mesh.rotation.set(Math.PI * 0.25, Math.PI * 0.25, 1.5);
 // mesh.rotation.x = Math.PI * 0.25;
 // mesh.rotation.y = Math.PI * 0.25;
-mesh.scale.set(1, 1, 1);
+// mesh.scale.set(1, 1, 1);
+
+//ANCHOR Debug
+const gui = new GUI({ width: 500 });
+// gui.hide();
+// prettier-ignore
+gui
+  .add(mesh.position, "y")
+  .min(-3)
+  .max(3)
+  .step(0.01)
+  .name('elevation');
+
+gui.add(mesh, "visible");
+gui.add(material, "wireframe");
+gui.add(mesh.rotation, "x").min(-3).max(3).step(0.01).name("X-rotation");
+gui.addColor(parameters, "color").onChange(() => {
+  material.color.set(parameters.color);
+});
+gui.add(parameters, "spin");
 
 //Group
 // const group = new THREE.Group();
@@ -71,9 +118,38 @@ scene.add(mesh);
 
 //Sizes
 const sizes = {
-  width: 800,
-  height: 600,
+  width: window.innerWidth,
+  height: window.innerHeight,
 };
+
+window.addEventListener("resize", () => {
+  sizes.width = window.innerWidth;
+  sizes.height = window.innerHeight;
+
+  camera.aspect = sizes.width / sizes.height;
+  camera.updateProjectionMatrix();
+  renderer.setSize(sizes.width, sizes.height);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+});
+
+window.addEventListener("dblclick", () => {
+  const fullScreen =
+    document.fullscreenElement || document.webkitFullscreenElement;
+
+  if (!fullScreen) {
+    if (canvas.requestFullscreen) {
+      canvas.requestFullscreen();
+    } else if (canvas.webkitRequestFullscreen) {
+      canvas.webkitRequestFullscreen();
+    }
+  } else {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    }
+  }
+});
 
 //Camera
 const camera = new THREE.PerspectiveCamera(
@@ -96,7 +172,7 @@ const camera = new THREE.PerspectiveCamera(
 // camera.position.x = 0.6;
 camera.position.set(0.6, 0.5, 3);
 // camera.lookAt(new THREE.Vector3(2, 1, -2));
-camera.lookAt(mesh.position);
+// camera.lookAt(mesh.position);
 
 scene.add(camera);
 
@@ -111,13 +187,14 @@ const renderer = new THREE.WebGLRenderer({
 });
 
 renderer.setSize(sizes.width, sizes.height);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 // renderer.render(scene, camera);
 
 // let time = Date.now();
 
 //Clock
 const clock = new THREE.Clock();
-console.log(clock);
+// console.log(clock);
 
 //GSAP
 // gsap.to(mesh.position, {
