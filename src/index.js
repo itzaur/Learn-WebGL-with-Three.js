@@ -4,8 +4,70 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import gsap from "gsap";
 import GUI from "lil-gui";
+import { NearestFilter } from "three";
 
-console.log(THREE);
+// const image = new Image();
+// const texture = new THREE.Texture(image);
+
+// image.onload = () => {
+//   texture.needsUpdate = true;
+// };
+// image.src = "/textures/door/color.jpg";
+
+/**
+ * ANCHOR Textures
+ */
+const loadingManager = new THREE.LoadingManager();
+loadingManager.onStart = () => {
+  console.log("onStart");
+};
+loadingManager.onLoad = () => {
+  console.log("onLoad");
+};
+loadingManager.onProgress = () => {
+  console.log("onProgress");
+};
+loadingManager.onError = () => {
+  console.log("onError");
+};
+
+const textureLoader = new THREE.TextureLoader(loadingManager);
+// prettier ignore
+const colorTexture = textureLoader.load("/textures/minecraft.png");
+// const colorTexture = textureLoader.load(
+//   "/textures/door/color.jpg",
+//   () => {
+//     console.log("loading finished");
+//   },
+//   () => {
+//     console.log("loading progressing");
+//   },
+//   () => {
+//     console.log("loading error");
+//   }
+// );
+
+const alphaTexture = textureLoader.load("/textures/door/alpha.jpg");
+const ambientOcclusionTexture = textureLoader.load(
+  "/textures/door/ambientOcclusion.jpg"
+);
+const heightTexture = textureLoader.load("/textures/door/height.jpg");
+const metalnessTexture = textureLoader.load("/textures/door/metalness.jpg");
+const normalTexture = textureLoader.load("/textures/door/normal.jpg");
+const roughnessTexture = textureLoader.load("/textures/door/roughness.jpg");
+
+// colorTexture.repeat.x = 2;
+// colorTexture.repeat.y = 3;
+// colorTexture.wrapS = THREE.MirroredRepeatWrapping;
+// colorTexture.wrapT = THREE.MirroredRepeatWrapping;
+// colorTexture.offset.x = 0.5;
+// colorTexture.offset.y = 0.5;
+// colorTexture.rotation = Math.PI * 0.25;
+// colorTexture.center.x = 0.5;
+// colorTexture.center.y = 0.5;
+colorTexture.generateMipmaps = false;
+colorTexture.minFilter = THREE.NearestFilter;
+colorTexture.magFilter = THREE.NearestFilter;
 
 //ANCHOR Cursor
 let cursor = {
@@ -33,6 +95,9 @@ const scene = new THREE.Scene();
 
 //Cube
 const geometry = new THREE.BoxGeometry(1, 1, 1);
+// console.log(geometry.attributes.uv);
+// const geometry = new THREE.TorusGeometry(1, 0.35, 32, 100);
+// const geometry = new THREE.SphereGeometry(1, 32, 32);
 // const positionsArray = new Float32Array([0, 0, 0, 0, 1, 0, 1, 0, 0]);
 // const positionsAttribute = new THREE.BufferAttribute(positionsArray, 3);
 // const geometry = new THREE.BufferGeometry();
@@ -48,7 +113,8 @@ const geometry = new THREE.BoxGeometry(1, 1, 1);
 // geometry.setAttribute("position", positionsAttribute);
 
 const material = new THREE.MeshBasicMaterial({
-  color: parameters.color,
+  map: colorTexture,
+  // color: parameters.color,
   // wireframe: true,
 });
 const mesh = new THREE.Mesh(geometry, material);

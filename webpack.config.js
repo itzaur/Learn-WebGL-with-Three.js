@@ -2,6 +2,7 @@ const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 let mode = "development";
 
@@ -20,6 +21,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "[name].bundle.js",
+    // assetModuleFilename: "assets/images/[hash][ext]",
   },
 
   module: {
@@ -40,6 +42,13 @@ module.exports = {
           "sass-loader",
         ],
       },
+      {
+        test: /\.(png|jpe?g|gif|svg|webp)/i,
+        type: "asset/resource",
+        generator: {
+          filename: "assets/images/[hash][ext]",
+        },
+      },
     ],
   },
 
@@ -56,6 +65,9 @@ module.exports = {
     new MiniCssExtractPlugin(),
     new HtmlWebpackPlugin({
       template: "./src/index.html",
+    }),
+    new CopyWebpackPlugin({
+      patterns: [{ from: path.resolve(__dirname, "./src/static") }],
     }),
   ],
 
