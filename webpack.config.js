@@ -49,6 +49,13 @@ module.exports = {
           filename: "assets/images/[hash][ext]",
         },
       },
+      {
+        test: /\.(ttf|eot|woff|woff2)$/,
+        type: "asset/resource",
+        generator: {
+          filename: "assets/fonts/[hash][ext]",
+        },
+      },
     ],
   },
 
