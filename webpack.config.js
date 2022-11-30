@@ -15,7 +15,7 @@ module.exports = {
   devtool: "source-map",
 
   entry: {
-    main: "./src/index.js",
+    main: "./src/galaxy.js",
   },
 
   output: {
