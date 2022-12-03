@@ -2,7 +2,6 @@ import "./styles/index.scss";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import * as dat from "lil-gui";
-import { BufferAttribute } from "three";
 
 //Canvas
 const canvas = document.querySelector(".webgl");
@@ -16,7 +15,7 @@ const sizes = {
   height: window.innerHeight,
 };
 
-///Parameters
+//Parameters
 const parameters = {
   count: 10000,
   size: 0.01,
@@ -50,6 +49,20 @@ controls.enableDamping = true;
 const renderer = new THREE.WebGLRenderer({ canvas: canvas });
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+//Resize
+window.addEventListener("resize", () => {
+  //Update sizes
+  (sizes.width = window.innerWidth), (sizes.height = window.innerHeight);
+
+  //Update camera
+  camera.aspect = sizes.width / sizes.height;
+  camera.updateProjectionMatrix();
+
+  //Update renderer
+  renderer.setSize(sizes.width, sizes.height);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+});
 
 /*
  * Textures
@@ -113,8 +126,8 @@ const generateGalaxy = () => {
     colors[i3 + 2] = mixedColors.b;
   }
 
-  geometry.setAttribute("position", new BufferAttribute(positions, 3));
-  geometry.setAttribute("color", new BufferAttribute(colors, 3));
+  geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+  geometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
 
   /*
    * Material
