@@ -15,7 +15,7 @@ module.exports = {
   devtool: "source-map",
 
   entry: {
-    main: "./src/scroll-page.js",
+    main: "./src/models.js",
   },
 
   output: {
