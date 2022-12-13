@@ -15,7 +15,7 @@ module.exports = {
   devtool: "source-map",
 
   entry: {
-    main: "./src/models.js",
+    main: "./src/fox.js",
   },
 
   output: {
