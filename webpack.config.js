@@ -15,7 +15,7 @@ module.exports = {
   devtool: "source-map",
 
   entry: {
-    main: "./src/fox.js",
+    main: "./src/scroll-page.js",
   },
 
   output: {
