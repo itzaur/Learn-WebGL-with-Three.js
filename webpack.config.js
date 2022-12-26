@@ -15,7 +15,7 @@ module.exports = {
   devtool: "source-map",
 
   entry: {
-    main: "./src/scroll-page.js",
+    main: "./src/shader_patterns.js",
   },
 
   output: {
@@ -54,6 +54,13 @@ module.exports = {
         type: "asset/resource",
         generator: {
           filename: "assets/fonts/[hash][ext]",
+        },
+      },
+      {
+        test: /\.(glsl|vs|fs|vert|frag)$/,
+        type: "asset/source",
+        generator: {
+          filename: "assets/images/[hash][ext]",
         },
       },
     ],
