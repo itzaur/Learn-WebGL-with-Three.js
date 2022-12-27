@@ -15,7 +15,7 @@ module.exports = {
   devtool: "source-map",
 
   entry: {
-    main: "./src/shader_patterns.js",
+    main: "./src/raging-sea.js",
   },
 
   output: {
