@@ -15,7 +15,7 @@ module.exports = {
   devtool: "source-map",
 
   entry: {
-    main: "./src/raging-sea.js",
+    main: "./src/galaxy2.0.js",
   },
 
   output: {
