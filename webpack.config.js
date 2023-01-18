@@ -15,7 +15,7 @@ module.exports = {
   devtool: "source-map",
 
   entry: {
-    main: "./src/materials_mod.js",
+    main: "./src/performance_tips.js",
   },
 
   output: {
