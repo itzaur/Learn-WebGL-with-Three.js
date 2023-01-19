@@ -32,6 +32,7 @@
     "cannon-es": "^0.15.1",
     "gsap": "^3.5.1",
     "three-instanced-uniforms-mesh": "^0.47.0",
+    "tweakpane": "^3.1.2",
     "vercel": "^28.5.5"
   }
 }

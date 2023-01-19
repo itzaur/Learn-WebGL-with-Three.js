@@ -350,61 +350,302 @@
 // }
 
 // new Sketch(document.querySelector(".webgl")).init();
+
 import "./styles/index.scss";
+// import * as THREE from "three";
+// import { gsap } from "gsap";
+// import * as dat from "lil-gui";
+// import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+// import { InstancedUniformsMesh } from "three-instanced-uniforms-mesh";
+// import { MathUtils } from "three";
+
+// export default class Sketch {
+//   constructor(canvas) {
+//     this.canvas = document.querySelector(canvas);
+
+//     this.width = window.innerWidth;
+//     this.height = window.innerHeight;
+
+//     this.colors = [
+//       new THREE.Color("#567189"),
+//       new THREE.Color("#7B8FA1"),
+//       new THREE.Color("#CFB997"),
+//       new THREE.Color("#FAD6A5"),
+//     ];
+
+//     this.uniforms = {
+//       uHover: 0,
+//     };
+
+//     this.resize = () => this.onResize();
+//     this.mousemove = (e) => this.onMouseMove(e);
+//   }
+
+//   init() {
+//     this.createScene();
+//     this.createCamera();
+//     this.createRenderer();
+//     this.createControls();
+//     this.createClock();
+//     this.createLight();
+//     this.createMesh();
+//     this.createRaycaster();
+//     this.addListeners();
+//     this.createDebugPanel();
+
+//     this.renderer.setAnimationLoop(() => {
+//       this.update();
+//       this.render();
+//     });
+//   }
+
+//   createScene() {
+//     this.scene = new THREE.Scene();
+//   }
+
+//   createCamera() {
+//     this.camera = new THREE.PerspectiveCamera(
+//       75,
+//       this.width / this.height,
+//       0.1,
+//       100
+//     );
+//     this.camera.position.set(1, 1, 0);
+//     this.scene.add(this.camera);
+//   }
+
+//   createRenderer() {
+//     this.renderer = new THREE.WebGLRenderer({
+//       canvas: this.canvas,
+//       alpha: true,
+//       antialias: true,
+//     });
+//     this.renderer.setSize(this.width, this.height);
+//     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+//     this.renderer.physicallyCorrectLights = true;
+//   }
+
+//   createControls() {
+//     this.controls = new OrbitControls(this.camera, this.canvas);
+//     this.controls.enableDamping = true;
+//   }
+
+//   createClock() {
+//     this.clock = new THREE.Clock();
+//   }
+
+//   createLight() {
+//     this.directionalLight = new THREE.DirectionalLight(0xffffff, 3);
+//     this.directionalLight.castShadow = true;
+//     this.directionalLight.position.set(1, 1, 0);
+//     this.directionalLight.shadow.mapSize.set(1024, 1024);
+//     this.directionalLight.shadow.camera.far = 15;
+
+//     this.scene.add(this.directionalLight);
+//   }
+
+//   createMesh() {
+//     this.geometry = new THREE.BoxGeometry(1, 1, 1, 10, 10, 10);
+//     this.material = new THREE.MeshStandardMaterial({ wireframe: true });
+//     this.mesh = new THREE.Mesh(this.geometry, this.material);
+//     this.scene.add(this.mesh);
+//     console.log(this.mesh);
+
+//     this.instancedGeometry = new THREE.CircleGeometry(0.02, 30);
+//     this.instancedMaterial = new THREE.ShaderMaterial({
+//       wireframe: true,
+//       vertexShader: require("./shaders/island/island.vertex.glsl"),
+//       fragmentShader: require("./shaders/island/island.fragment.glsl"),
+//       uniforms: {
+//         uColor: { value: new THREE.Color() },
+//         uPointer: { value: new THREE.Vector3() },
+//         uSize: { value: 0 },
+//         uRotation: { value: 0 },
+//         uHover: { value: this.uniforms.uHover },
+//       },
+//     });
+//     this.instancedMesh = new InstancedUniformsMesh(
+//       this.instancedGeometry,
+//       this.instancedMaterial,
+//       this.mesh.geometry.attributes.position.count
+//     );
+//     this.scene.add(this.instancedMesh);
+
+//     const dummy = new THREE.Object3D();
+
+//     const positions = this.mesh.geometry.attributes.position.array;
+//     for (let i = 0; i < positions.length; i += 3) {
+//       dummy.position.set(positions[i + 0], positions[i + 1], positions[i + 2]);
+
+//       dummy.updateMatrix();
+
+//       this.instancedMesh.setMatrixAt(i / 3, dummy.matrix);
+
+//       this.instancedMesh.setUniformAt(
+//         "uSize",
+//         i / 3,
+//         MathUtils.randFloat(3, 0.3)
+//       );
+//       this.instancedMesh.setUniformAt(
+//         "uRotation",
+//         i / 3,
+//         MathUtils.randFloat(1, -1)
+//       );
+
+//       const colorsIndex = MathUtils.randInt(0, this.colors.length - 1);
+//       this.instancedMesh.setUniformAt(
+//         "uColor",
+//         i / 3,
+//         this.colors[colorsIndex]
+//       );
+//     }
+//   }
+
+//   checkMobile() {
+//     this.isMobile = window.innerWidth < 767;
+//   }
+
+//   update() {
+//     this.camera.position.z = this.isMobile ? 3 : 2;
+//     this.controls.update();
+//   }
+
+//   render() {
+//     this.renderer.render(this.scene, this.camera);
+//   }
+
+//   createDebugPanel() {}
+
+//   createRaycaster() {
+//     this.mouse = new THREE.Vector2();
+
+//     this.raycaster = new THREE.Raycaster();
+//     this.point = new THREE.Vector3();
+//     this.intersects = [];
+//   }
+
+//   animateUniformsHover(value) {
+//     gsap.to(this.uniforms, {
+//       uHover: value,
+//       duration: 0.3,
+//       onUpdate: () => {
+//         for (let i = 0; i < this.instancedMesh.count; i++) {
+//           this.instancedMesh.setUniformAt("uHover", i, this.uniforms.uHover);
+//         }
+//       },
+//     });
+//   }
+
+//   onMouseMove(e) {
+//     const x = (e.clientX / this.width) * 2 - 1;
+//     const y = -((e.clientY / this.height) * 2 - 1);
+
+//     this.mouse.set(x, y);
+
+//     gsap.to(this.camera.position, {
+//       x: () => x * 1.4,
+//       y: () => y * 0.4,
+//       duration: 0.5,
+//     });
+
+//     this.raycaster.setFromCamera(this.mouse, this.camera);
+//     this.intersects = this.raycaster.intersectObject(this.mesh);
+//     // console.log(this.intersects);
+//     if (this.intersects.length === 0) {
+//       console.log("mouseleave");
+//       this.animateUniformsHover(0);
+//     } else {
+//       console.log("mouseenter");
+//       this.animateUniformsHover(2);
+
+//       gsap.to(this.point, {
+//         x: () => this.intersects[0]?.point.x || 0,
+//         y: () => this.intersects[0]?.point.y || 0,
+//         z: () => this.intersects[0]?.point.z || 0,
+//         duration: 0.5,
+//         onUpdate: () => {
+//           for (let i = 0; i < this.instancedMesh.count; i++) {
+//             this.instancedMesh.setUniformAt("uPointer", i, this.point);
+//           }
+//         },
+//       });
+//     }
+//   }
+
+//   onResize() {
+//     this.width = window.innerWidth;
+//     this.height = window.innerHeight;
+
+//     this.camera.aspect = this.width / this.height;
+//     this.camera.updateProjectionMatrix();
+
+//     this.renderer.setSize(this.width, this.height);
+//     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+//     this.checkMobile();
+//   }
+
+//   addListeners() {
+//     window.addEventListener("resize", this.resize, { passive: true });
+//     window.addEventListener("mousemove", this.mousemove, { passive: true });
+//   }
+// }
+
+// new Sketch(".webgl").init();
+
+// import {
+//   Scene,
+//   WebGLRenderer,
+//   PerspectiveCamera,
+//   IcosahedronGeometry,
+//   // ParametricGeometry,
+//   MeshPhysicalMaterial,
+//   Mesh,
+//   AmbientLight,
+//   DirectionalLight,
+//   Color,
+//   Vector3,
+//   Clock,
+// } from "three";
 import * as THREE from "three";
-import { InstancedUniformsMesh } from "three-instanced-uniforms-mesh";
+import { ParametricGeometry } from "three/examples/jsm/geometries/ParametricGeometry";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import * as dat from "lil-gui";
-import { gsap } from "gsap";
-import { MathUtils } from "three";
 
 export default class Sketch {
-  constructor(canvas) {
-    this.canvas = canvas;
+  constructor(container) {
+    this.container = document.querySelector(container);
 
-    //Debug
-    this.gui = new dat.GUI();
-
-    //Sizes
     this.width = window.innerWidth;
     this.height = window.innerHeight;
 
-    //Colors
-    this.colors = [
-      new THREE.Color("#FFD4B2"),
-      new THREE.Color("#FFF6BD"),
-      new THREE.Color("#CEEDC7"),
-      new THREE.Color("#86C8BC"),
-    ];
-
-    this.hover = false;
-    this.uniforms = {
-      uHover: 0,
-    };
     this.config = {
-      scale: 4,
+      metalness: 0.5,
+      roughness: 0,
+      color: "#FF8B13",
     };
 
     this.resize = () => this.onResize();
-    this.mousemove = (e) => this.onMousemove(e);
   }
 
   init() {
     this.createScene();
     this.createCamera();
     this.createRenderer();
-    this.createRaycaster();
-    this.addGui();
-
-    this.addMesh().then(() => {
-      document.documentElement.classList.add("model-loaded");
-    });
+    this.createHelicoid();
+    this.createSpheres();
+    this.createLight();
+    this.createClock();
+    this.addListeners();
+    this.createControls();
+    this.createDebugPanel();
 
     this.renderer.setAnimationLoop(() => {
-      this.addListeners();
-
-      this.update();
       this.render();
+      this.update();
     });
+
+    console.log(this);
   }
 
   createScene() {
@@ -418,191 +659,202 @@ export default class Sketch {
       0.1,
       100
     );
-    this.camera.position.set(0, 0, 2);
-    this.scene.add(this.camera);
+    this.camera.position.set(0, 0, 3);
+  }
+
+  createControls() {
+    this.controls = new OrbitControls(this.camera, this.container);
+    this.controls.enableDamping = true;
+  }
+
+  createClock() {
+    this.clock = new THREE.Clock();
+  }
+
+  createLight() {
+    this.directionalLight = new THREE.DirectionalLight(0xffffff, 3);
+    this.directionalLight.position.set(1, 1, 1);
+    this.directionalLight.shadow.mapSize.set(1024, 1024);
+    this.directionalLight.shadow.camera.far = 15;
+    this.scene.add(this.directionalLight);
   }
 
   createRenderer() {
     this.renderer = new THREE.WebGLRenderer({
-      canvas: this.canvas,
+      canvas: this.container,
       alpha: true,
       antialias: true,
     });
     this.renderer.setSize(this.width, this.height);
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    this.renderer.shadowMap.enabled = true;
+    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.renderer.physicallyCorrectLights = true;
-    this.renderer.outputEncoding = THREE.sRGBEncoding;
+  }
+
+  getMaterial() {
+    const material = new THREE.MeshPhysicalMaterial({
+      color: this.config.color,
+      metalness: this.config.metalness,
+      roughness: this.config.roughness,
+      side: 2,
+    });
+
+    material.onBeforeCompile = (shader) => {
+      shader.uniforms.playhead = { value: 0 };
+      shader.fragmentShader =
+        `
+        uniform float playhead;
+      ` + shader.fragmentShader;
+
+      shader.fragmentShader = shader.fragmentShader.replace(
+        "#include <logdepthbuf_fragment>",
+        `
+
+        vec3 colorA = vec3(0.5, 0.5, 0.5);
+        vec3 colorB = vec3(0.5, 0.5, 0.5);
+        vec3 colorC = vec3(2.0, 1.0, 0.0);
+        vec3 colorD = vec3(0.5, 0.2, 0.25);
+
+        float diff = dot(vec3(1.0), vNormal);
+
+        vec3 color = colorA + colorB * cos(2.0 * 3.141592 * (colorC * diff + colorD + playhead));
+        diffuseColor.rgb = color;
+      ` + "#include <logdepthbuf_fragment>"
+      );
+
+      material.userData.shader = shader;
+    };
+    return material;
+  }
+
+  createHelicoid() {
+    const material = this.getMaterial();
+
+    const helicoidVector = new THREE.Vector3();
+
+    function Helicoid(u, v, helicoidVector) {
+      const alpha = Math.PI * 2 * (u - 0.5);
+      const theta = Math.PI * 2 * (v - 0.5);
+      const dividend = 1 + Math.cosh(alpha) * Math.cosh(theta);
+      const t = 1.5;
+
+      const x = (Math.sinh(theta) * Math.cos(t * alpha)) / dividend;
+      const z = (Math.sinh(theta) * Math.sin(t * alpha)) / dividend;
+      const y = (1.5 * Math.cosh(theta) * Math.sinh(alpha)) / dividend;
+
+      helicoidVector.set(x, y, z);
+    }
+
+    const geometry = new ParametricGeometry(Helicoid, 100, 100);
+
+    this.helicoid = new THREE.Mesh(geometry, material);
+
+    this.helicoid.castShadow = this.helicoid.receiveShadow = true;
+
+    this.scene.add(this.helicoid);
+  }
+
+  createSpheres() {
+    const geometry = new THREE.IcosahedronGeometry(0.25, 5);
+
+    this.ball1 = new THREE.Mesh(geometry, this.getMaterial());
+    this.ball2 = new THREE.Mesh(geometry, this.getMaterial());
+    // this.ball2.position.x = 1;
+    this.ball1.castShadow = this.ball1.receiveShadow = true;
+    this.ball2.castShadow = this.ball2.receiveShadow = true;
+    this.scene.add(this.ball1, this.ball2);
+
+    this.updateAllMaterials();
   }
 
   render() {
     this.renderer.render(this.scene, this.camera);
   }
 
-  addMesh() {
-    return new Promise((resolve) => {
-      this.geometry = new THREE.TorusGeometry(3, 0.8, 40, 100);
-      this.material = new THREE.MeshStandardMaterial();
-      this.mesh = new THREE.Mesh(this.geometry, this.material);
-      console.log(this.mesh);
-      // this.scene.add(this.mesh);
+  update() {
+    this.elapsedTime = this.clock.getElapsedTime();
 
-      //Create InstancedMesh
-      this.instancedMeshGeometry = new THREE.SphereGeometry(0.002, 5, 5, 5, 5);
+    this.helicoid.rotation.y = this.elapsedTime;
 
-      this.instancedMeshMaterial = new THREE.ShaderMaterial({
-        wireframe: true,
-        vertexShader: require("./shaders/island/island.vertex.glsl"),
-        fragmentShader: require("./shaders/island/island.fragment.glsl"),
-        uniforms: {
-          uSize: { value: 0 },
-          uRotation: { value: 0 },
-          uColor: { value: new THREE.Color() },
-          uPointer: { value: new THREE.Vector3() },
-          uHover: { value: this.uniforms.uHover },
-        },
-      });
+    if (!!this.helicoid.material.userData.shader) {
+      this.helicoid.material.userData.shader.uniforms.playhead.value =
+        this.elapsedTime * 0.5;
+      this.ball1.material.userData.shader.uniforms.playhead.value =
+        this.elapsedTime * 0.5;
+      this.ball2.material.userData.shader.uniforms.playhead.value =
+        this.elapsedTime * 0.5;
+    }
 
-      this.instancedMesh = new InstancedUniformsMesh(
-        this.instancedMeshGeometry,
-        this.instancedMeshMaterial,
-        this.mesh.geometry.attributes.position.count
-      );
+    this.theta1 = this.elapsedTime * 0.32 * Math.PI;
+    this.theta2 = this.elapsedTime * 0.32 * Math.PI + Math.PI;
 
-      this.scene.add(this.instancedMesh);
+    this.ball1.position.x = Math.sin(this.theta1) * 0.6;
+    this.ball1.position.z = Math.cos(this.theta1) * 0.6;
 
-      const dummy = new THREE.Object3D();
+    this.ball2.position.x = Math.sin(this.theta2) * 0.6;
+    this.ball2.position.z = Math.cos(this.theta2) * 0.6;
 
-      const positions = this.mesh.geometry.attributes.position.array;
-      for (let i = 0; i < positions.length; i += 3) {
-        dummy.position.set(
-          positions[i + 0],
-          positions[i + 1],
-          positions[i + 2]
-        );
+    this.controls.update();
+  }
 
-        dummy.updateMatrix();
+  updateAllMaterials() {
+    this.scene.traverse((child) => {
+      if (
+        child instanceof THREE.Mesh &&
+        child.material instanceof THREE.MeshPhysicalMaterial
+      ) {
+        child.castShadow = true;
+        child.receiveShadow = true;
 
-        this.instancedMesh.setMatrixAt(i / 3, dummy.matrix);
-
-        this.instancedMesh.setUniformAt(
-          "uSize",
-          i / 3,
-          MathUtils.randFloat(0.3, 3)
-        );
-
-        this.instancedMesh.setUniformAt(
-          "uRotation",
-          i / 3,
-          MathUtils.randFloat(-1, 1)
-        );
-
-        const colorsIndex = MathUtils.randInt(0, this.colors.length - 1);
-        this.instancedMesh.setUniformAt(
-          "uColor",
-          i / 3,
-          this.colors[colorsIndex]
-        );
+        child.material.needsUpdate = true;
       }
-
-      resolve();
     });
   }
 
-  checkMobile() {
-    this.isMobile = window.innerWidth < 767;
-  }
-
-  update() {
-    this.camera.lookAt(0, 0, 0);
-    this.camera.position.z = this.isMobile ? 12 : 6;
-  }
-
-  createRaycaster() {
-    this.mouse = new THREE.Vector2();
-    this.point = new THREE.Vector3();
-
-    this.raycaster = new THREE.Raycaster();
-    this.intersects = [];
-  }
-
   onResize() {
-    this.width = window.innerWidth;
-    this.height = window.innerHeight;
-
     this.camera.aspect = this.width / this.height;
     this.camera.updateProjectionMatrix();
 
     this.renderer.setSize(this.width, this.height);
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-    this.checkMobile();
-  }
-
-  onMousemove(e) {
-    const x = (e.clientX / this.width) * 2 - 1;
-    const y = -((e.clientY / this.height) * 2 - 1);
-
-    this.mouse.set(x, y);
-
-    this.raycaster.setFromCamera(this.mouse, this.camera);
-    this.intersects = this.raycaster.intersectObject(this.mesh);
-
-    gsap.to(this.camera.position, {
-      x: () => x * 3,
-      y: () => y * 1.5,
-
-      duration: 0.5,
-    });
-
-    if (this.intersects.length === 0) {
-      //Mouseleave
-      console.log("mouseleave");
-      if (this.hover) {
-        this.hover = false;
-        this.animateHoverUniforms(0);
-      }
-    } else {
-      console.log("mouseenter");
-      if (!this.hover) {
-        this.hover = true;
-        this.animateHoverUniforms(this.config.scale);
-      }
-
-      gsap.to(this.point, {
-        x: () => this.intersects[0]?.point.x || 0,
-        y: () => this.intersects[0]?.point.y || 0,
-        z: () => this.intersects[0]?.point.z || 0,
-        duration: 0.3,
-        overwrite: true,
-        onUpdate: () => {
-          for (let i = 0; i < this.instancedMesh.count; i++) {
-            this.instancedMesh.setUniformAt("uPointer", i, this.point);
-          }
-        },
-      });
-    }
-  }
-
-  animateHoverUniforms(value) {
-    gsap.to(this.uniforms, {
-      uHover: value,
-      duration: 0.3,
-      onUpdate: () => {
-        for (let i = 0; i < this.instancedMesh.count; i++) {
-          this.instancedMesh.setUniformAt("uHover", i, this.uniforms.uHover);
-        }
-      },
-    });
   }
 
   addListeners() {
     window.addEventListener("resize", this.resize, { passive: true });
-    window.addEventListener("mousemove", this.mousemove, { passive: true });
   }
 
-  addGui() {
-    this.gui.add(this.config, "scale").min(1).max(10).step(0.01).name("scale");
+  removeListeners() {
+    window.removeEventListener("resize", this.resize, { passive: true });
+  }
+
+  createDebugPanel() {
+    this.gui = new dat.GUI();
+
+    this.gui
+      .add(this.directionalLight.position, "x")
+      .min(-5)
+      .max(20)
+      .step(0.001);
+    this.gui
+      .add(this.directionalLight.position, "y")
+      .min(-5)
+      .max(20)
+      .step(0.001);
+    this.gui
+      .add(this.directionalLight.position, "z")
+      .min(-5)
+      .max(20)
+      .step(0.001);
+    this.gui.add(this.directionalLight, "intensity").min(0).max(10).step(0.001);
+    this.gui.add(this.config, "metalness").min(0).max(20).step(0.001);
+    this.gui.add(this.config, "roughness").min(0).max(20).step(0.001);
+    // this.gui.addColor(this.config, "color").onChange(() => {
+    //   this.helicoid.material.color.set(this.config.color);
+    //   this.updateAllMaterials();
+    // });
   }
 }
 
-new Sketch(document.querySelector(".webgl")).init();
+const app = new Sketch(".webgl");
+app.init();
