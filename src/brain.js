@@ -13,6 +13,7 @@ export default class Sketch {
     this.geometry = null;
     this.material = null;
     this.instancedMesh = null;
+    this.brain = null;
 
     //Debug
     this.gui = new dat.GUI();
@@ -144,9 +145,13 @@ export default class Sketch {
           this.scene.remove(this.instancedMesh);
         }
 
+        console.log(gltf.scene);
         console.log(this.instancedMesh);
 
         this.brain = gltf.scene.children[0];
+
+        // this.brain.rotation.z = -Math.PI;
+        // this.brain.scale.set(2, 2, 2);
         // this.brain.scale.set(0.1, 0.1, 0.1);
 
         // console.log(this.brain);
