@@ -15,7 +15,7 @@ module.exports = {
   devtool: "source-map",
 
   entry: {
-    main: "./src/brain.js",
+    main: "./src/island.js",
   },
 
   output: {
