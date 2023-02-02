@@ -15,7 +15,7 @@ module.exports = {
   devtool: "source-map",
 
   entry: {
-    main: "./src/island.js",
+    main: "./src/loader.js",
   },
 
   output: {
