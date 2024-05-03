@@ -1,26 +1,26 @@
-const path = require("path");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
+const path = require('path');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-let mode = "development";
+let mode = 'development';
 
-if (process.env.NODE_ENV === "production") {
-  mode = "production";
+if (process.env.NODE_ENV === 'production') {
+  mode = 'production';
 }
 
 module.exports = {
   mode: mode,
-  devtool: "source-map",
+  devtool: 'source-map',
 
   entry: {
-    main: "./src/loader.js",
+    main: './src/index2.0.js',
   },
 
   output: {
-    path: path.resolve(__dirname, "dist"),
-    filename: "[name].bundle.js",
+    path: path.resolve(__dirname, 'dist'),
+    filename: '[name].bundle.js',
     // assetModuleFilename: "assets/images/[hash][ext]",
   },
 
@@ -30,44 +30,44 @@ module.exports = {
         test: /\.js$/,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader",
+          loader: 'babel-loader',
         },
       },
       {
         test: /\.(s[ac]|c)ss$/i,
         use: [
           MiniCssExtractPlugin.loader,
-          "css-loader",
-          "postcss-loader",
-          "sass-loader",
+          'css-loader',
+          'postcss-loader',
+          'sass-loader',
         ],
       },
       {
         test: /\.(png|jpe?g|gif|svg|webp)/i,
-        type: "asset/resource",
+        type: 'asset/resource',
         generator: {
-          filename: "assets/images/[hash][ext]",
+          filename: 'assets/images/[hash][ext]',
         },
       },
       {
         test: /\.(ttf|eot|woff|woff2)$/,
-        type: "asset/resource",
+        type: 'asset/resource',
         generator: {
-          filename: "assets/fonts/[hash][ext]",
+          filename: 'assets/fonts/[hash][ext]',
         },
       },
       {
         test: /\.(glsl|vs|fs|vert|frag)$/,
-        type: "asset/source",
+        type: 'asset/source',
         generator: {
-          filename: "assets/images/[hash][ext]",
+          filename: 'assets/images/[hash][ext]',
         },
       },
     ],
   },
 
   devServer: {
-    static: "./dist",
+    static: './dist',
     hot: true,
     devMiddleware: {
       writeToDisk: true,
@@ -78,10 +78,10 @@ module.exports = {
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin(),
     new HtmlWebpackPlugin({
-      template: "./src/index.html",
+      template: './src/index2.0.html',
     }),
     new CopyWebpackPlugin({
-      patterns: [{ from: path.resolve(__dirname, "./src/static") }],
+      patterns: [{ from: path.resolve(__dirname, './src/static') }],
     }),
   ],
 
